@@ -11,5 +11,12 @@
     <version>1</version>
 
     <packaging>jar</packaging>
-   
+    
+    <dependencies>
+        <dependency>
+            <groupId>masolar.gamework</groupId>
+            <artifactId>gamework</artifactId>
+            <version>1</version>
+        </dependency>
+    </dependencies>
   </project>
