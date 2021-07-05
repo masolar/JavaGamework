@@ -54,7 +54,7 @@ public class Vector2D {
      * Gets the x component of the vector.
      * @return A double representing the length of the x component of the vector.
      */
-    public double getXComponent() {
+    public double getX() {
         // cos expects our orientation in radians, so it needs to be converted
         return this.x;
     }
@@ -63,7 +63,7 @@ public class Vector2D {
      * Gets the y component of the vector.
      * @return A double representing the length of the y component of the vector.
      */
-    public double getYComponent() {
+    public double getY() {
         // sin expects our orientation in radians, so it needs to be converted
         return this.y;
     }
