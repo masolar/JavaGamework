@@ -1,19 +1,24 @@
 package gamework;
 
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
-
-import gamework.components.GamePanel;
 import gamework.objects.GameObject;
 import gamework.rendering.Renderable;
 
 public class Game {
     private static GamePanel gamePanel;
-    private static ArrayList<GameObject> objects;
-    private static ArrayList<Renderable> renderables;
+    private static List<GameObject> objects;
+    private static List<Renderable> renderables;
     private static long frameStartTime;
+
+    private Game() {}
 
     public static void createGame(int width, int height, String title) {
         objects = new ArrayList<>();
@@ -49,7 +54,7 @@ public class Game {
         gameFrame.setTitle(title);
 
         // Setup the JPanel. All drawing will take place here.
-        gamePanel = new GamePanel(renderables, width, height);
+        gamePanel = new GamePanel(width, height);
 
         gameFrame.add(gamePanel);
         gameFrame.setVisible(true);
@@ -130,5 +135,50 @@ public class Game {
     public static void removeGameObject(GameObject go) {
         objects.remove(go);
         renderables.remove(go);
+    }
+
+    /**
+    * A class which represents the screen that the game is rendered on.
+    */
+    static class GamePanel extends JPanel {
+        /**
+         * Sets the number of units that the height is considered to be.
+         * This is used to handle scaling a game to different resolutions.
+         */
+        private static final double FIXED_UNITS_HEIGHT = 100;
+
+        /**
+         * Used to convert from units back to pixels. It's
+         * dependent on the height of the game window.
+         */
+        private final double pixelsPerUnit;
+
+        private double xScale;
+        private double yScale;
+
+        /**
+         * Constructs a game panel for rendering components of the game.
+         * @param width The width of the game panel.
+         * @param height The height of the game panel.
+         */
+        public GamePanel(int width, int height) {
+            super();
+
+            this.setPreferredSize(new Dimension(width, height));
+
+            this.pixelsPerUnit = height / FIXED_UNITS_HEIGHT;
+        }
+
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D graphics = (Graphics2D) g;
+            graphics.translate(getWidth() / 2, getHeight() / 2);
+            graphics.scale(xScale, yScale);
+            
+            for (Renderable object : renderables) {
+                object.render(graphics);
+            }
+        }
     }
 }
